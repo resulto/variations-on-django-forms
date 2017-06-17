@@ -1,0 +1,72 @@
+{% extends "animal/root.html" %}
+
+{% block title %}Form - Dynamic Required - Validation in clean(){% endblock %}
+{% block page-title %}Form - Dynamic Required - Validation in clean(){% endblock %}
+{% block content %}
+    {% if success %}
+        <div class="row">
+            <div class="col-12">Success!</div>
+        </div>
+    {% endif %}
+    <div id="app" class="row">
+        <div class="col-4">
+            <form method="post" v-cloak>
+                {% csrf_token %}
+                {% if form.errors %}
+                    {{form.errors}}
+                {% endif %}
+                {% verbatim %}
+                    <div class="form-group">
+                        <label for="id_name">* Name</label>
+                        <input v-model="name" required type="text" class="form-control" name="name" id="id_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_type">* Type</label>
+                        <select v-model="type" required class="form-control" name="type" id="id_type">
+                            <option v-for="option in typeChoices" :value="option.value">{{option.label}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_age"><span v-show="ageIsRequired">* </span>Age</label>
+                        <input v-model="age" :required="ageIsRequired" type="number" class="form-control" name="age" id="id_age">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_favorite_activity">* Favorite Activity</label>
+                        <select v-model="favoriteActivity" required class="form-control" name="favorite_activity" id="id_favorite_activity">
+                            <option v-for="option in activityChoices" :value="option.value">{{option.label}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_activities">Activities</label>
+                        <select v-model="activities" multiple class="form-control" name="activities" id="id_activities">
+                            <option v-for="option in activityChoices" :value="option.value">{{option.label}}</option>
+                        </select>
+                    </div>
+                {% endverbatim %}
+
+                <button type="submit">Create animal</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block post-script %}
+<script>
+    var app = new Vue({
+        el: '#app',
+        computed: {
+            ageIsRequired: function() {
+                return this.type === 'cat';
+            }
+        },
+        data: {
+            name: '',
+            type: '',
+            age: null,
+            favoriteActivity: '',
+            activities: [],
+            activityChoices: {{activities_json|safe}},
+            typeChoices: {{types_json|safe}},
+        }
+    });
+</script>
+{% endblock %}

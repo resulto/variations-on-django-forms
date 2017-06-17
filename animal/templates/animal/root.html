@@ -1,0 +1,56 @@
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <title>{% block title %}{% endblock %}</title>
+        <style>
+            [v-cloak] {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1>{% block page-title %}{% endblock %}</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h2>Menu</h2>
+                    <ul>
+                        <li><a href="{% url "animal:home"%}">Home</a></li>
+                        <li><a href="{% url "animal:dynamic_required_1" %}">Dynamic Optional 1</a></li>
+                        <li><a href="{% url "animal:dynamic_required_2" %}">Dynamic Optional 2</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <h2>Form</h2>
+                </div>
+            </div>
+            {% block content %}
+            {% endblock %}
+            <div class="row">
+                <div class="col-12">
+                    <h2>Animals</h2>
+                    <ul>
+                        {% for animal in animals %}
+                            <li>{{animal}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script></script></script></script>
+        <script src="https://unpkg.com/vue"></script>
+        {% block post-script %}
+        {% endblock %}
+    </body>
+</html>

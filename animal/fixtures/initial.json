@@ -1,0 +1,72 @@
+[
+    {
+        "model": "animal.AnimalType",
+        "pk": "cat",
+        "fields": {
+            "label": "Cat"
+        }
+    },
+    {
+        "model": "animal.AnimalType",
+        "pk": "dog",
+        "fields": {
+            "label": "Dog"
+        }
+    },
+    {
+        "model": "animal.AnimalType",
+        "pk": "bird",
+        "fields": {
+            "label": "Bird"
+        }
+    },
+    {
+        "model": "animal.Activity",
+        "fields": {
+            "animal_type": "cat",
+            "label": "Purring"
+        }
+    },
+    {
+        "model": "animal.Activity",
+        "fields": {
+            "animal_type": "cat",
+            "label": "Eating"
+        }
+    },
+    {
+        "model": "animal.Activity",
+        "fields": {
+            "animal_type": "cat",
+            "label": "Napping"
+        }
+    },
+    {
+        "model": "animal.Activity",
+        "fields": {
+            "animal_type": "cat",
+            "label": "Playing"
+        }
+    },
+    {
+        "model": "animal.Activity",
+        "fields": {
+            "animal_type": "dog",
+            "label": "Barking"
+        }
+    },
+    {
+        "model": "animal.Activity",
+        "fields": {
+            "animal_type": "dog",
+            "label": "Walking"
+        }
+    },
+    {
+        "model": "animal.Activity",
+        "fields": {
+            "animal_type": "bird",
+            "label": "Flying"
+        }
+    }
+]
