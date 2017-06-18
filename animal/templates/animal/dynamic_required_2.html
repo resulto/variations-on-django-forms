@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <label for="id_type">* Type</label>
                         <select v-model="type" required class="form-control" name="type" id="id_type">
-                            <option v-for="option in typeChoices" :value="option.value">{{option.label}}</option>
+                            <option v-for="option in formTypeChoices" :value="option.value">{{option.label}}</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -66,6 +66,8 @@
             activities: [],
             activityChoices: {{activities_json|safe}},
             typeChoices: {{types_json|safe}},
+            formTypeChoices: {{form_types_json|safe}},
+            formActivityChoices: {{form_activities_json|safe}},
         }
     });
 </script>

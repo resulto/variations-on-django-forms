@@ -10,6 +10,24 @@ from animal.models import Animal, Activity, AnimalType
 
 class AnimalView(View):
 
+    def _fill_context(self, context):
+        form = context["form"]
+        form_types = [
+            {
+                "value": choice[0],
+                "label": choice[1]
+            } for choice in form.fields["type"].choices
+        ]
+        context["form_types_json"] = json.dumps(form_types)
+
+        form_activities = [
+            {
+                "value": choice[0],
+                "label": choice[1]
+            } for choice in form.fields["favorite_activity"].choices
+        ]
+        context["form_activities_json"] = json.dumps(form_activities)
+
     def dispatch(self, request, *args, **kwargs):
         self.context = {}
         self.context["animals"] = Animal.objects.order_by("pk")
@@ -42,6 +60,7 @@ class Home(AnimalView):
         template_name = "animal/home.html"
         context["success"] = request.GET.get("success") == "success"
         context["form"] = forms.Form1()
+        self._fill_context(context)
         return render(request, template_name, context)
 
     def post(self, request):
@@ -55,6 +74,7 @@ class Home(AnimalView):
         else:
             context["form"] = form
             context["success"] = False
+            self._fill_context(context)
             template_name = "animal/home.html"
             return render(request, template_name, context)
 
@@ -66,7 +86,7 @@ class DynamicRequired1(AnimalView):
         template_name = "animal/dynamic_required_1.html"
         context["success"] = request.GET.get("success") == "success"
         context["form"] = forms.DynamicRequired1()
-        print(list(context["form"].fields["type"].choices))
+        self._fill_context(context)
         return render(request, template_name, context)
 
     def post(self, request):
@@ -80,6 +100,7 @@ class DynamicRequired1(AnimalView):
         else:
             context["form"] = form
             context["success"] = False
+            self._fill_context(context)
             template_name = "animal/dynamic_required_1.html"
             return render(request, template_name, context)
 
@@ -91,6 +112,7 @@ class DynamicRequired2(AnimalView):
         template_name = "animal/dynamic_required_2.html"
         context["success"] = request.GET.get("success") == "success"
         context["form"] = forms.DynamicRequired2()
+        self._fill_context(context)
         return render(request, template_name, context)
 
     def post(self, request):
@@ -104,5 +126,43 @@ class DynamicRequired2(AnimalView):
         else:
             context["form"] = form
             context["success"] = False
+            self._fill_context(context)
             template_name = "animal/dynamic_required_2.html"
             return render(request, template_name, context)
+
+
+class DynamicRequired3(AnimalView):
+
+    def get(self, request):
+        context = self.context
+        template_name = "animal/dynamic_required_3.html"
+        context["success"] = request.GET.get("success") == "success"
+        context["form"] = forms.DynamicRequired3()
+        self._fill_context(context)
+        self._add_age_choices(context)
+        return render(request, template_name, context)
+
+    def post(self, request):
+        context = self.context
+        template_name = "animal/dynamic_required_3.html"
+        form = forms.DynamicRequired3(data=request.POST)
+        if form.is_valid():
+            form.save()
+            url = reverse("animal:dynamic_required_3") + "?success=success"
+            return redirect(url)
+        else:
+            context["form"] = form
+            context["success"] = False
+            self._fill_context(context)
+            self._add_age_choices(context)
+            template_name = "animal/dynamic_required_3.html"
+            return render(request, template_name, context)
+
+    def _add_age_choices(self, context):
+        form = context["form"]
+        age_choices = [
+            {
+                "value": choice[0],
+                "label": choice[1]
+            } for choice in form.fields["age"].choices]
+        context["form_age_json"] = json.dumps(age_choices)

@@ -9,4 +9,6 @@ urlpatterns = [
         name='dynamic_required_1'),
     url(r'^dynamic-required-2$', views.DynamicRequired2.as_view(),
         name='dynamic_required_2'),
+    url(r'^dynamic-required-3$', views.DynamicRequired3.as_view(),
+        name='dynamic_required_3'),
 ]

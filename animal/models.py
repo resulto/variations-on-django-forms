@@ -27,6 +27,7 @@ class Animal(models.Model):
         Activity, related_name="favored_by_animals")
     activities = models.ManyToManyField(
         Activity, related_name="animals", blank=True)
+    internal_notes = models.TextField(blank=True, default="")
 
     def __str__(self):
         return "{type}: {name} of age {age}".format(

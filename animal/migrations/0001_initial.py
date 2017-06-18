@@ -29,6 +29,7 @@ class Migration(migrations.Migration):
                 ('age', models.IntegerField(blank=True, null=True)),
                 ('activities', models.ManyToManyField(blank=True, related_name='animals', to='animal.Activity')),
                 ('favorite_activity', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='favored_by_animals', to='animal.Activity')),
+                ('internal_notes', models.TextField(blank=True, default="")),
             ],
         ),
         migrations.CreateModel(
