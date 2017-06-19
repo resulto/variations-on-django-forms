@@ -30,5 +30,8 @@ class Animal(models.Model):
     internal_notes = models.TextField(blank=True, default="")
 
     def __str__(self):
-        return "{type}: {name} of age {age}".format(
-            type=self.type.label, name=self.name, age=self.age)
+        return "{type}: {name} of age {age}. Favorite: {activity} "\
+            "({count} activities)".format(
+                type=self.type.label, name=self.name, age=self.age,
+                activity=self.favorite_activity.label,
+                count=self.activities.count())

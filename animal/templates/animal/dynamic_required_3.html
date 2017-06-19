@@ -35,13 +35,13 @@
                     <div class="form-group">
                         <label for="id_favorite_activity">* Favorite Activity</label>
                         <select v-model="favoriteActivity" required class="form-control" name="favorite_activity" id="id_favorite_activity">
-                            <option v-for="option in activityChoices" :value="option.value">{{option.label}}</option>
+                            <option v-for="option in availableActivities" :value="option.value">{{option.label}}</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="id_activities">Activities</label>
                         <select v-model="activities" multiple class="form-control" name="activities" id="id_activities">
-                            <option v-for="option in activityChoices" :value="option.value">{{option.label}}</option>
+                            <option v-for="option in availableActivities" :value="option.value">{{option.label}}</option>
                         </select>
                     </div>
                 {% endverbatim %}
@@ -53,8 +53,30 @@
 {% endblock %}
 {% block post-script %}
 <script>
+    var DEFAULT_ACTIVITY = {
+        value: '',
+        label: 'Select an activity'
+    };
+
     var app = new Vue({
         el: '#app',
+        computed: {
+            availableActivities: function() {
+                if (!this.type) {
+                    // Return default activity
+                    return [DEFAULT_ACTIVITY];
+                } else {
+                    var activities = [DEFAULT_ACTIVITY];
+                    for (var i=0; i < this.activityChoices.length; i++) {
+                        var activity = this.activityChoices[i];
+                        if (activity.for_type == this.type) {
+                            activities.push(activity);
+                        }
+                    }
+                    return activities;
+                }
+            },
+        },
         data: {
             name: '',
             type: '',
