@@ -80,14 +80,16 @@ class DynamicRequired1(forms.ModelForm):
     """
     Age required if type is cat. This is checked in clean().
 
-    Adding an empty label, e.g., 'Please select this' to a modelchoicefield is
-    tricky and is best done with subclassing.
+    Adding an empty label, e.g., 'Please select this' to a modelchoicefield can
+    be tricky and is best done with subclassing or by setting empty_label
+    explicitly after the form's __init__.
     """
 
     type = ModelChoiceFieldWithEmptyLabel(
         queryset=AnimalType.objects.all(),
         empty_label='Select Animal Type')
-    """Subclass to add an empty label."""
+    """Subclass to add an empty label in all cases even when there is a default
+    value."""
 
     def clean(self):
         cleaned_data = super().clean()
@@ -108,14 +110,11 @@ class DynamicRequired2(forms.ModelForm):
     unvalidated data instead of cleaned_data.
     """
 
-    type = ModelChoiceFieldWithEmptyLabel(
-        queryset=AnimalType.objects.all(),
-        empty_label='Select Animal Type')
-    """Subclass to add an empty label."""
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        # Alternative to ModelChoiceFieldWithEmptyLabel
+        self.fields["type"].empty_label = "Select Animal Type"
         animal_type = self.data.get("type")
         if animal_type == "cat":
             self.fields["age"].required = True
@@ -233,6 +232,80 @@ class DynamicRequired3(forms.ModelForm):
         fields = ["name", "age", "type", "favorite_activity", "activities"]
 
 
-# TODO
-# Add a weird choice in type (Tiger, use internal notes)
-# BasicForm: form with initial and save!
+class DynamicRequired4(forms.Form):
+    """Replaces a ModelForm by a form when you have heavily customized fields.
+    """
+
+    name = forms.CharField(
+        label="name")
+    age = forms.IntegerField(
+        label="age", required=False)
+    type = forms.ChoiceField(
+        label="Type")
+    favorite_activity = forms.TypedChoiceField(
+        coerce=int,
+        empty_value=None,
+        label="Favorite Activity")
+    activities = forms.TypedMultipleChoiceField(
+        coerce=int,
+        empty_value=None,
+        label="Activities")
+
+    def __init__(self, *args, **kwargs):
+        # Instance is not a valid keyword arg so we remove it
+        instance = kwargs.pop("instance", None)
+        if instance:
+            initial = self.get_initial(instance)
+            kwargs["initial"] = initial
+            print(kwargs)
+        super().__init__(*args, **kwargs)
+
+        choices = [
+            (type.pk, type.label)
+            for type in AnimalType.objects.all()]
+        choices.insert(0, ("", "Select an animal"))
+        choices.append(("tiger", "Tiger"))
+        self.fields["type"].choices = choices
+
+        choices = [
+            (activity.pk, activity.label)
+            for activity in Activity.objects.all()
+        ]
+        choices.insert(0, ("", "Select an activity"))
+        self.fields["favorite_activity"].choices = choices
+        new_choices = choices[1:]
+        self.fields["activities"].choices = new_choices
+
+    def get_initial(self, instance):
+        initial = {
+            "name": instance.name,
+            "age": instance.age,
+            "type": instance.type_id,
+            "favorite_activity": instance.favorite_activity_id,
+            "activities": [
+                activity.pk for activity in instance.activities.all()]
+        }
+        if instance.internal_notes == "tiger":
+            initial["type"] = "tiger"
+        return initial
+
+    def save_instance(self):
+        type = self.cleaned_data["type"]
+        if type == "tiger":
+            internal_notes = "tiger"
+            type = AnimalType(pk="cat")
+        else:
+            internal_notes = ""
+
+        animal = Animal(
+            type=type,
+            age=self.cleaned_data["age"],
+            name=self.cleaned_data["name"],
+            favorite_activity=Activity(
+                pk=self.cleaned_data["favorite_activity"]),
+            internal_notes=internal_notes
+        )
+        animal.save()
+        activities = Activity.objects.filter(
+            pk__in=self.cleaned_data["activities"])
+        animal.activities.add(*activities)

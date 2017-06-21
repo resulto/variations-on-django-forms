@@ -166,3 +166,31 @@ class DynamicRequired3(AnimalView):
                 "label": choice[1]
             } for choice in form.fields["age"].choices]
         context["form_age_json"] = json.dumps(age_choices)
+
+
+class DynamicRequired4(AnimalView):
+
+    def get(self, request):
+        context = self.context
+        template_name = "animal/dynamic_required_4.html"
+        context["success"] = request.GET.get("success") == "success"
+        # animal = Animal.objects.order_by("-pk").first()
+        # context["form"] = forms.DynamicRequired4(
+            # instance=animal)
+        context["form"] = forms.DynamicRequired4()
+        return render(request, template_name, context)
+
+    def post(self, request):
+        context = self.context
+        template_name = "animal/dynamic_required_4.html"
+        form = forms.DynamicRequired4(data=request.POST)
+        if form.is_valid():
+            # Notice the custom method!
+            form.save_instance()
+            url = reverse("animal:dynamic_required_4") + "?success=success"
+            return redirect(url)
+        else:
+            context["form"] = form
+            context["success"] = False
+            template_name = "animal/dynamic_required_4.html"
+            return render(request, template_name, context)

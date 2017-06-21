@@ -30,8 +30,13 @@ class Animal(models.Model):
     internal_notes = models.TextField(blank=True, default="")
 
     def __str__(self):
-        return "{type}: {name} of age {age}. Favorite: {activity} "\
+        label = "{type}: {name} of age {age}. Favorite: {activity} "\
             "({count} activities)".format(
                 type=self.type.label, name=self.name, age=self.age,
                 activity=self.favorite_activity.label,
                 count=self.activities.count())
+
+        if self.internal_notes:
+            label += " notes: {0}".format(self.internal_notes)
+
+        return label

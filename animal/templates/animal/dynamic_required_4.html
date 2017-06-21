@@ -1,0 +1,25 @@
+{% extends "animal/root.html" %}
+
+{% block title %}Form - Dynamic Required 4{% endblock %}
+{% block page-title %}Form - Dynamic Required 4{% endblock %}
+{% block content %}
+    {% if success %}
+        <div class="row">
+            <div class="col-12">Success!</div>
+        </div>
+    {% endif %}
+    <div id="app" class="row">
+        <div class="col-4">
+            <form method="post">
+                {% csrf_token %}
+                {% if form.errors %}
+                    {{form.errors}}
+                {% endif %}
+                {{ form.as_p }}
+                <button type="submit">Create animal</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block post-script %}
+{% endblock %}
