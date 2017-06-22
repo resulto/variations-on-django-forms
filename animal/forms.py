@@ -115,7 +115,7 @@ class DynamicRequired2(forms.ModelForm):
 
         # Alternative to ModelChoiceFieldWithEmptyLabel
         self.fields["type"].empty_label = "Select Animal Type"
-        animal_type = self.data.get("type")
+        animal_type = self.data.get(self.add_prefix("type"))
         if animal_type == "cat":
             self.fields["age"].required = True
 
@@ -199,7 +199,7 @@ class DynamicRequired3(forms.ModelForm):
         self.fields["type"].choices = choices
 
         # XXX Set activity choices for this animal type.
-        animal_type = self.data.get("type")
+        animal_type = self.data.get(self.add_prefix("type"))
         if animal_type:
             choices = [
                 (activity.pk, activity.label) for activity in
