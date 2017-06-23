@@ -55,17 +55,17 @@ class AnimalView(View):
 
 class Home(AnimalView):
 
+    template_name = "animal/home.html"
+
     def get(self, request):
         context = self.context
-        template_name = "animal/home.html"
         context["success"] = request.GET.get("success") == "success"
         context["form"] = forms.Form1()
         self._fill_context(context)
-        return render(request, template_name, context)
+        return render(request, self.template_name, context)
 
     def post(self, request):
         context = self.context
-        template_name = "animal/home.html"
         form = forms.Form1(data=request.POST)
         if form.is_valid():
             form.save()
@@ -75,23 +75,22 @@ class Home(AnimalView):
             context["form"] = form
             context["success"] = False
             self._fill_context(context)
-            template_name = "animal/home.html"
-            return render(request, template_name, context)
+            return render(request, self.template_name, context)
 
 
 class DynamicRequired1(AnimalView):
 
+    template_name = "animal/dynamic_required_1.html"
+
     def get(self, request):
         context = self.context
-        template_name = "animal/dynamic_required_1.html"
         context["success"] = request.GET.get("success") == "success"
         context["form"] = forms.DynamicRequired1()
         self._fill_context(context)
-        return render(request, template_name, context)
+        return render(request, self.template_name, context)
 
     def post(self, request):
         context = self.context
-        template_name = "animal/dynamic_required_1.html"
         form = forms.DynamicRequired1(data=request.POST)
         if form.is_valid():
             form.save()
@@ -101,23 +100,22 @@ class DynamicRequired1(AnimalView):
             context["form"] = form
             context["success"] = False
             self._fill_context(context)
-            template_name = "animal/dynamic_required_1.html"
-            return render(request, template_name, context)
+            return render(request, self.template_name, context)
 
 
 class DynamicRequired2(AnimalView):
 
+    template_name = "animal/dynamic_required_2.html"
+
     def get(self, request):
         context = self.context
-        template_name = "animal/dynamic_required_2.html"
         context["success"] = request.GET.get("success") == "success"
         context["form"] = forms.DynamicRequired2()
         self._fill_context(context)
-        return render(request, template_name, context)
+        return render(request, self.template_name, context)
 
     def post(self, request):
         context = self.context
-        template_name = "animal/dynamic_required_2.html"
         form = forms.DynamicRequired2(data=request.POST)
         if form.is_valid():
             form.save()
@@ -127,24 +125,23 @@ class DynamicRequired2(AnimalView):
             context["form"] = form
             context["success"] = False
             self._fill_context(context)
-            template_name = "animal/dynamic_required_2.html"
-            return render(request, template_name, context)
+            return render(request, self.template_name, context)
 
 
 class DynamicRequired3(AnimalView):
 
+    template_name = "animal/dynamic_required_3.html"
+
     def get(self, request):
         context = self.context
-        template_name = "animal/dynamic_required_3.html"
         context["success"] = request.GET.get("success") == "success"
         context["form"] = forms.DynamicRequired3()
         self._fill_context(context)
         self._add_age_choices(context)
-        return render(request, template_name, context)
+        return render(request, self.template_name, context)
 
     def post(self, request):
         context = self.context
-        template_name = "animal/dynamic_required_3.html"
         form = forms.DynamicRequired3(data=request.POST)
         if form.is_valid():
             form.save()
@@ -155,8 +152,7 @@ class DynamicRequired3(AnimalView):
             context["success"] = False
             self._fill_context(context)
             self._add_age_choices(context)
-            template_name = "animal/dynamic_required_3.html"
-            return render(request, template_name, context)
+            return render(request, self.template_name, context)
 
     def _add_age_choices(self, context):
         form = context["form"]
@@ -170,19 +166,19 @@ class DynamicRequired3(AnimalView):
 
 class DynamicRequired4(AnimalView):
 
+    template_name = "animal/dynamic_required_4.html"
+
     def get(self, request):
         context = self.context
-        template_name = "animal/dynamic_required_4.html"
         context["success"] = request.GET.get("success") == "success"
         # animal = Animal.objects.order_by("-pk").first()
         # context["form"] = forms.DynamicRequired4(
             # instance=animal)
         context["form"] = forms.DynamicRequired4()
-        return render(request, template_name, context)
+        return render(request, self.template_name, context)
 
     def post(self, request):
         context = self.context
-        template_name = "animal/dynamic_required_4.html"
         form = forms.DynamicRequired4(data=request.POST)
         if form.is_valid():
             # Notice the custom method!
@@ -192,5 +188,4 @@ class DynamicRequired4(AnimalView):
         else:
             context["form"] = form
             context["success"] = False
-            template_name = "animal/dynamic_required_4.html"
-            return render(request, template_name, context)
+            return render(request, self.template_name, context)
