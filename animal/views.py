@@ -10,7 +10,13 @@ from animal.models import Animal, Activity, AnimalType
 
 class AnimalView(View):
 
-    def _fill_context(self, context):
+    def _fill_context(self, **kwargs):
+        context = self.context
+
+        if kwargs is not None:
+            for key, value in kwargs.items():
+                context[key] = value
+
         form = context["form"]
         form_types = [
             {
@@ -59,9 +65,9 @@ class Home(AnimalView):
 
     def get(self, request):
         context = self.context
-        context["success"] = request.GET.get("success") == "success"
-        context["form"] = forms.Form1()
-        self._fill_context(context)
+        self._fill_context(
+            success=request.GET.get("success") == "success",
+            form=forms.Form1())
         return render(request, self.template_name, context)
 
     def post(self, request):
@@ -72,9 +78,7 @@ class Home(AnimalView):
             url = reverse("animal:home") + "?success=success"
             return redirect(url)
         else:
-            context["form"] = form
-            context["success"] = False
-            self._fill_context(context)
+            self._fill_context(success=False, form=form)
             return render(request, self.template_name, context)
 
 
@@ -84,9 +88,9 @@ class DynamicRequired1(AnimalView):
 
     def get(self, request):
         context = self.context
-        context["success"] = request.GET.get("success") == "success"
-        context["form"] = forms.DynamicRequired1()
-        self._fill_context(context)
+        self._fill_context(
+            success=request.GET.get("success") == "success",
+            form=forms.DynamicRequired1())
         return render(request, self.template_name, context)
 
     def post(self, request):
@@ -97,9 +101,7 @@ class DynamicRequired1(AnimalView):
             url = reverse("animal:dynamic_required_1") + "?success=success"
             return redirect(url)
         else:
-            context["form"] = form
-            context["success"] = False
-            self._fill_context(context)
+            self._fill_context(success=False, form=form)
             return render(request, self.template_name, context)
 
 
@@ -109,9 +111,9 @@ class DynamicRequired2(AnimalView):
 
     def get(self, request):
         context = self.context
-        context["success"] = request.GET.get("success") == "success"
-        context["form"] = forms.DynamicRequired2()
-        self._fill_context(context)
+        self._fill_context(
+            success=request.GET.get("success") == "success",
+            form=forms.DynamicRequired2())
         return render(request, self.template_name, context)
 
     def post(self, request):
@@ -122,9 +124,7 @@ class DynamicRequired2(AnimalView):
             url = reverse("animal:dynamic_required_2") + "?success=success"
             return redirect(url)
         else:
-            context["form"] = form
-            context["success"] = False
-            self._fill_context(context)
+            self._fill_context(success=False, form=form)
             return render(request, self.template_name, context)
 
 
@@ -134,9 +134,9 @@ class DynamicRequired3(AnimalView):
 
     def get(self, request):
         context = self.context
-        context["success"] = request.GET.get("success") == "success"
-        context["form"] = forms.DynamicRequired3()
-        self._fill_context(context)
+        self._fill_context(
+            success=request.GET.get("success") == "success",
+            form=forms.DynamicRequired3())
         self._add_age_choices(context)
         return render(request, self.template_name, context)
 
@@ -148,9 +148,7 @@ class DynamicRequired3(AnimalView):
             url = reverse("animal:dynamic_required_3") + "?success=success"
             return redirect(url)
         else:
-            context["form"] = form
-            context["success"] = False
-            self._fill_context(context)
+            self._fill_context(success=False, form=form)
             self._add_age_choices(context)
             return render(request, self.template_name, context)
 
