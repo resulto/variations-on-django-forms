@@ -11,10 +11,10 @@ M = TypeVar('M', bound=models.Model)      # Declare type variable
 
 def materialize_models(models: List[M]) -> List[M]:
     """Retrieves a list of models from the DB if the models did not come from a
-    DB. This is useful iif:
+    DB. This is useful if:
 
     1. You want to add the models to a m2m relationship
-    2. The model where constructed like Model(pk=pk)
+    2. The models were constructed like Model(pk=pk)
     """
     if not models:
         return models
@@ -219,7 +219,7 @@ class DynamicRequired3(forms.ModelForm):
         # XXX With m2m, lazy objects do not work :-(
         # Imagine if your list has thousands of choices and the user
         # can select hundreds of choice. This method has very good performance,
-        # but it offer no validation (hence the choice computation in
+        # but it offers no validation (hence the choice computation in
         # __init__).
         activities = self.cleaned_data.get("activities")
         if activities:
