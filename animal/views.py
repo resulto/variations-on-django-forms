@@ -11,6 +11,7 @@ from animal.models import Animal, Activity, AnimalType
 class AnimalView(View):
 
     def __init__(self):
+        super().__init__()
         self.context = {}
 
     def _add_form_context(self, form):
