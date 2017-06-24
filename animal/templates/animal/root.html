@@ -4,6 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        {% load static %}
+        <link rel="stylesheet" href="{% static "animal/style.css" %}">
         <title>{% block title %}{% endblock %}</title>
         <style>
             [v-cloak] {
@@ -20,25 +22,22 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <h2>Menu</h2>
-                    <ul>
-                        <li><a href="{% url "animal:home"%}">Home</a></li>
-                        <li><a href="{% url "animal:dynamic_required_1" %}">Dynamic Required 1</a></li>
-                        <li><a href="{% url "animal:dynamic_required_2" %}">Dynamic Required 2</a></li>
-                        <li><a href="{% url "animal:dynamic_required_3" %}">Dynamic Required 3</a></li>
-                        <li><a href="{% url "animal:dynamic_required_4" %}">Dynamic Required 4</a></li>
+                    <h2>Examples</h2>
+                    <ul class="nav main-menu">
+                        {% for item in menu_items %}
+                            <li class="nav-item main-menu-item">
+                                <a class="nav-link {% if item.page_name == page_name %}active{% endif %}" href="{{ item.url }}">{{ item.title }}</a>
+                            </li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
             <div class="row">
-                <div class="col-12">
+                <div class="col-md-6">
                     <h2>Form</h2>
+                    {% block content %}{% endblock %}
                 </div>
-            </div>
-            {% block content %}
-            {% endblock %}
-            <div class="row">
-                <div class="col-12">
+                <div class="col-md-6">
                     <h2>Animals</h2>
                     <ul>
                         {% for animal in animals %}

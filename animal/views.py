@@ -8,11 +8,41 @@ from animal import forms
 from animal.models import Animal, Activity, AnimalType
 
 
+def get_menu_items():
+    return [
+        {
+            "page_name": "home",
+            "url": reverse("animal:home"),
+            "title": "Model Form",
+        }, {
+            "page_name": "dynamic1",
+            "url": reverse("animal:dynamic_required_1"),
+            "title": "Dynamic Required 1",
+        }, {
+            "page_name": "dynamic2",
+            "url": reverse("animal:dynamic_required_2"),
+            "title": "Dynamic Required 2",
+        }, {
+            "page_name": "dynamic3",
+            "url": reverse("animal:dynamic_required_3"),
+            "title": "Dynamic Required 3",
+        }, {
+            "page_name": "dynamic4",
+            "url": reverse("animal:dynamic_required_4"),
+            "title": "Dynamic Required 4",
+        },
+    ]
+
+
 class AnimalView(View):
+
+    page_name = ""
 
     def __init__(self):
         super().__init__()
         self.context = {}
+        self.context["page_name"] = self.page_name
+        self.context["menu_items"] = get_menu_items()
 
     def _add_form_context(self, form):
         form_types = [
@@ -61,14 +91,15 @@ class AnimalView(View):
 
 class Home(AnimalView):
 
-    template_name = "animal/home.html"
+    page_name = "home"
+    template_file = "animal/home.html"
 
     def get(self, request):
         self.context.update({
             "success": request.GET.get("success") == "success",
         })
         self._add_form_context(forms.Form1())
-        return render(request, self.template_name, self.context)
+        return render(request, self.template_file, self.context)
 
     def post(self, request):
         form = forms.Form1(data=request.POST)
@@ -79,19 +110,20 @@ class Home(AnimalView):
         else:
             self.context.update({"success": False})
             self._add_form_context(form)
-            return render(request, self.template_name, self.context)
+            return render(request, self.template_file, self.context)
 
 
 class DynamicRequired1(AnimalView):
 
-    template_name = "animal/dynamic_required_1.html"
+    page_name = "dynamic1"
+    template_file = "animal/dynamic_required_1.html"
 
     def get(self, request):
         self.context.update({
             "success": request.GET.get("success") == "success",
         })
         self._add_form_context(forms.DynamicRequired1())
-        return render(request, self.template_name, self.context)
+        return render(request, self.template_file, self.context)
 
     def post(self, request):
         form = forms.DynamicRequired1(data=request.POST)
@@ -102,19 +134,20 @@ class DynamicRequired1(AnimalView):
         else:
             self.context.update({"success": False})
             self._add_form_context(form)
-            return render(request, self.template_name, self.context)
+            return render(request, self.template_file, self.context)
 
 
 class DynamicRequired2(AnimalView):
 
-    template_name = "animal/dynamic_required_2.html"
+    page_name = "dynamic2"
+    template_file = "animal/dynamic_required_2.html"
 
     def get(self, request):
         self.context.update({
             "success": request.GET.get("success") == "success",
         })
         self._add_form_context(forms.DynamicRequired2())
-        return render(request, self.template_name, self.context)
+        return render(request, self.template_file, self.context)
 
     def post(self, request):
         form = forms.DynamicRequired2(data=request.POST)
@@ -125,12 +158,13 @@ class DynamicRequired2(AnimalView):
         else:
             self.context.update({"success": False})
             self._add_form_context(form)
-            return render(request, self.template_name, self.context)
+            return render(request, self.template_file, self.context)
 
 
 class DynamicRequired3(AnimalView):
 
-    template_name = "animal/dynamic_required_3.html"
+    page_name = "dynamic3"
+    template_file = "animal/dynamic_required_3.html"
 
     def get(self, request):
         self.context.update({
@@ -138,7 +172,7 @@ class DynamicRequired3(AnimalView):
         })
         self._add_form_context(forms.DynamicRequired3())
         self._add_age_choices()
-        return render(request, self.template_name, self.context)
+        return render(request, self.template_file, self.context)
 
     def post(self, request):
         form = forms.DynamicRequired3(data=request.POST)
@@ -150,7 +184,7 @@ class DynamicRequired3(AnimalView):
             self.context.update({"success": False})
             self._add_form_context(form)
             self._add_age_choices()
-            return render(request, self.template_name, self.context)
+            return render(request, self.template_file, self.context)
 
     def _add_age_choices(self):
         form = self.context["form"]
@@ -164,7 +198,8 @@ class DynamicRequired3(AnimalView):
 
 class DynamicRequired4(AnimalView):
 
-    template_name = "animal/dynamic_required_4.html"
+    page_name = "dynamic4"
+    template_file = "animal/dynamic_required_4.html"
 
     def get(self, request):
         # animal = Animal.objects.order_by("-pk").first()
@@ -174,7 +209,7 @@ class DynamicRequired4(AnimalView):
             "success": request.GET.get("success") == "success",
             "form": form,
         })
-        return render(request, self.template_name, self.context)
+        return render(request, self.template_file, self.context)
 
     def post(self, request):
         form = forms.DynamicRequired4(data=request.POST)
@@ -188,4 +223,4 @@ class DynamicRequired4(AnimalView):
                 "success": False,
                 "form": form
             })
-            return render(request, self.template_name, self.context)
+            return render(request, self.template_file, self.context)
