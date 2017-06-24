@@ -77,8 +77,7 @@ class Form1(forms.ModelForm):
 
 
 class DynamicRequired1(forms.ModelForm):
-    """
-    Age required if type is cat. This is checked in clean().
+    """Age required if type is cat. This is checked in clean().
 
     Adding an empty label, e.g., 'Please select this' to a modelchoicefield can
     be tricky and is best done with subclassing or by setting empty_label
@@ -104,9 +103,8 @@ class DynamicRequired1(forms.ModelForm):
 
 
 class DynamicRequired2(forms.ModelForm):
-    """
-    Age is required if type is cat. This time, we set the required attribute in
-    __init__. The required validation is more standard BUT we must work with
+    """Age is required if type is cat. This time, we set the required attribute
+    in __init__. The required validation is more standard BUT we must work with
     unvalidated data instead of cleaned_data.
     """
 
@@ -156,8 +154,7 @@ def get_lazy_activity(value):
 
 
 class DynamicRequired3(forms.ModelForm):
-    """
-    Demonstrates the use of TypedChoiceField to replace a ModelChoiceField.
+    """Demonstrates the use of TypedChoiceField to replace a ModelChoiceField.
     """
 
     type = forms.TypedChoiceField(
@@ -184,8 +181,7 @@ class DynamicRequired3(forms.ModelForm):
         empty_value=None,  # Value given to empty choice
         coerce=get_lazy_activity,
         required=True)
-    """Will validate the value with a list of choices defined
-    in __init__"""
+    """Will validate the value with a list of choices defined in __init__"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

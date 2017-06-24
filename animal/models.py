@@ -2,7 +2,6 @@ from django.db import models
 
 
 class AnimalType(models.Model):
-
     code = models.CharField(primary_key=True, max_length=10)
     label = models.CharField(max_length=250)
 
