@@ -11,10 +11,10 @@ M = TypeVar('M', bound=models.Model)      # Declare type variable
 
 def materialize_models(models: List[M]) -> List[M]:
     """Retrieves a list of models from the DB if the models did not come from a
-    DB. This is useful iif:
+    DB. This is useful if:
 
     1. You want to add the models to a m2m relationship
-    2. The model where constructed like Model(pk=pk)
+    2. The models were constructed like Model(pk=pk)
     """
     if not models:
         return models
@@ -77,8 +77,7 @@ class Form1(forms.ModelForm):
 
 
 class DynamicRequired1(forms.ModelForm):
-    """
-    Age required if type is cat. This is checked in clean().
+    """Age required if type is cat. This is checked in clean().
 
     Adding an empty label, e.g., 'Please select this' to a modelchoicefield can
     be tricky and is best done with subclassing or by setting empty_label
@@ -104,9 +103,8 @@ class DynamicRequired1(forms.ModelForm):
 
 
 class DynamicRequired2(forms.ModelForm):
-    """
-    Age is required if type is cat. This time, we set the required attribute in
-    __init__. The required validation is more standard BUT we must work with
+    """Age is required if type is cat. This time, we set the required attribute
+    in __init__. The required validation is more standard BUT we must work with
     unvalidated data instead of cleaned_data.
     """
 
@@ -156,8 +154,7 @@ def get_lazy_activity(value):
 
 
 class DynamicRequired3(forms.ModelForm):
-    """
-    Demonstrates the use of TypedChoiceField to replace a ModelChoiceField.
+    """Demonstrates the use of TypedChoiceField to replace a ModelChoiceField.
     """
 
     type = forms.TypedChoiceField(
@@ -184,8 +181,7 @@ class DynamicRequired3(forms.ModelForm):
         empty_value=None,  # Value given to empty choice
         coerce=get_lazy_activity,
         required=True)
-    """Will validate the value with a list of choices defined
-    in __init__"""
+    """Will validate the value with a list of choices defined in __init__"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -219,7 +215,7 @@ class DynamicRequired3(forms.ModelForm):
         # XXX With m2m, lazy objects do not work :-(
         # Imagine if your list has thousands of choices and the user
         # can select hundreds of choice. This method has very good performance,
-        # but it offer no validation (hence the choice computation in
+        # but it offers no validation (hence the choice computation in
         # __init__).
         activities = self.cleaned_data.get("activities")
         if activities:
